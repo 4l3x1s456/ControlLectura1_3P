@@ -45,6 +45,44 @@ curl http://localhost:8080/api/v1/orders/{orderId}
 ```
 
 - Check Stock:
+### Verify Messaging via Inventory POST
+
+- Purpose: Quickly verify RabbitMQ flow by publishing `StockReserved/StockRejected` directly from Inventory.
+- Steps:
+	- Start infra: `docker compose up -d`
+	- Run services from IDE: OrderService (8080), InventoryService (3000)
+	- Create an order in OrderService to get an `orderId` (or use any UUID).
+	- Trigger Inventory POST:
+
+```bash
+curl -X POST http://localhost:3000/api/v1/integration/stock-check \
+	-H "Content-Type: application/json" \
+	-d '{
+		"orderId": "{{orderId}}",
+		"correlationId": "{{correlationId}}",
+		"items": [
+			{"productId": "a3c2b1d0-6b0e-4f2b-9c1a-2d3f4a5b6c7d", "quantity": 2},
+			{"productId": "b7e8c9d1-2f3a-4b5c-8d9e-1a2b3c4d5e6f", "quantity": 1}
+		]
+	}'
+```
+
+- Expected:
+	- Inventory responds with published event details.
+	- OrderService consumes `stock.response.queue` and updates order to `CONFIRMED` or `CANCELLED`.
+	- RabbitMQ UI shows messages under exchange `order.exchange`.
+
+### Endpoints Summary
+- OrderService:
+	- POST `/api/v1/orders` → create order (PENDING + publish OrderCreated)
+	- GET `/api/v1/orders/{orderId}` → get order details/status
+	- PUT `/api/v1/orders/{orderId}?status=CONFIRMED|CANCELLED|PENDING` → update status
+	- DELETE `/api/v1/orders/{orderId}` → delete order
+- InventoryService:
+	- GET `/api/v1/products/{productId}/stock` → check stock
+	- PUT `/api/v1/products/{productId}/stock` → set available stock
+	- DELETE `/api/v1/products/{productId}` → remove product
+	- POST `/api/v1/integration/stock-check` → reserve/rollback and publish stock event
  - Update Order Status (PUT):
 
 ```bash

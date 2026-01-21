@@ -62,3 +62,13 @@ export async function initRabbit() {
 
   console.log('RabbitMQ initialized and consuming OrderCreated');
 }
+
+export function publishStockReserved(payload) {
+  if (!channel) throw new Error('Rabbit channel not initialized');
+  channel.publish(EXCHANGE, RK_STOCK_RESERVED, Buffer.from(JSON.stringify(payload)), { persistent: true });
+}
+
+export function publishStockRejected(payload) {
+  if (!channel) throw new Error('Rabbit channel not initialized');
+  channel.publish(EXCHANGE, RK_STOCK_REJECTED, Buffer.from(JSON.stringify(payload)), { persistent: true });
+}
