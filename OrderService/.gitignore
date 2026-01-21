@@ -1,0 +1,38 @@
+### Build outputs
+target/
+build/
+
+### Logs
+*.log
+logs/
+spring.log
+
+### OS files
+.DS_Store
+Thumbs.db
+
+### IDE/Editor
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.apt_generated
+.factorypath
+.sts4-cache
+
+### NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code
+.vscode/
+
+### Maven plugin reports
+/surefire-reports/
+/failsafe-reports/

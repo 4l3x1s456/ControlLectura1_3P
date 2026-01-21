@@ -1,0 +1,71 @@
+{
+  "info": {
+    "name": "E-commerce Microservices",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Order",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "url": {"raw": "http://localhost:8080/api/v1/orders", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api","v1","orders"]},
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customerId\": \"9f7a1e2a-31f6-4a53-b0d2-6f4f1c7a3b2e\",\n  \"items\": [\n    {\"productId\": \"a3c2b1d0-6b0e-4f2b-9c1a-2d3f4a5b6c7d\", \"quantity\": 2},\n    {\"productId\": \"b7e8c9d1-2f3a-4b5c-8d9e-1a2b3c4d5e6f\", \"quantity\": 1}\n  ],\n  \"paymentReference\": \"pay_abc123\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Get Order",
+      "request": {
+        "method": "GET",
+        "url": {"raw": "http://localhost:8080/api/v1/orders/{{orderId}}", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api","v1","orders","{{orderId}}"]}
+      }
+    },
+    {
+      "name": "Update Order Status (PUT)",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "http://localhost:8080/api/v1/orders/{{orderId}}?status={{status}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api","v1","orders","{{orderId}}"],
+          "query": [{"key":"status","value":"CANCELLED"}]
+        }
+      }
+    },
+    {
+      "name": "Delete Order",
+      "request": {
+        "method": "DELETE",
+        "url": {"raw": "http://localhost:8080/api/v1/orders/{{orderId}}", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api","v1","orders","{{orderId}}"]}
+      }
+    },
+    {
+      "name": "Get Stock",
+      "request": {
+        "method": "GET",
+        "url": {"raw": "http://localhost:3000/api/v1/products/{{productId}}/stock", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api","v1","products","{{productId}}","stock"]}
+      }
+    },
+    {
+      "name": "Update Stock (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "url": {"raw": "http://localhost:3000/api/v1/products/{{productId}}/stock", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api","v1","products","{{productId}}","stock"]},
+        "body": {"mode":"raw","raw":"{\n  \"availableStock\": 7\n}"}
+      }
+    },
+    {
+      "name": "Delete Product",
+      "request": {
+        "method": "DELETE",
+        "url": {"raw": "http://localhost:3000/api/v1/products/{{productId}}", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api","v1","products","{{productId}}"]}
+      }
+    }
+  ]
+}
